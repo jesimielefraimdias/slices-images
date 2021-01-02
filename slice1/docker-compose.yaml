@@ -1,0 +1,9 @@
+version: "3"
+services:
+  ubuntu:
+    build: 
+      context: ./docker
+      dockerfile: Dockerfile
+    image: linux-ubuntu-slice1
+    ports:
+      - "5001:5000"

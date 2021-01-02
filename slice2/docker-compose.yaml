@@ -1,0 +1,41 @@
+version: "3"
+services:
+  ubuntu:
+    build: 
+      context: ./docker
+      dockerfile: Dockerfile
+    image: linux-ubuntu-slice2
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=src/App.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - DEBIAN_FRONTEND=noninteractive
+    command: >
+      bash -c "source bin/activate &&
+      pip3 install wheel &&
+      pip3 install -r requirements.txt && 
+      python3 src/db.py && 
+      flask run"
+    depends_on:
+      - db
+  db:
+    image: "mysql:latest"
+    ports: 
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=computacao
+      - MYSQL_DATABASE=slice2
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ./docker/mysql_volume:/var/lib/mysql
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=computacao --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 30s
+      retries: 15
