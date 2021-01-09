@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ubuntu
+  name: ubuntu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ubuntu
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ubuntu
+    spec:
+      containers:
+        - args:
+            - bash
+            - -c
+            - source bin/activate && pip3 install wheel && pip3 install -r requirements.txt &&  python3 src/db.py &&  flask run
+          env:
+            - name: DEBIAN_FRONTEND
+              value: noninteractive
+            - name: FLASK_APP
+              value: src/App.py
+            - name: FLASK_RUN_HOST
+              value: 0.0.0.0
+          image: linux-ubuntu-slice2
+          name: ubuntu
+          ports:
+            - containerPort: 5000
+          resources: {}
+      restartPolicy: Always
+status: {}
