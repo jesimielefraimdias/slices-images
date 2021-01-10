@@ -1,7 +1,11 @@
 version: "3"
 services:
   ubuntu:
-    image: jesimielefraimdias/ubuntu-slice2
+#    build: 
+#      context: ./docker
+#      dockerfile: Dockerfile
+#    image: ubuntu-slice2
+    image: jesimielefraimdias/ubuntu-slice2:1.0.3
     ports:
       - "5000:5000"
     environment:
@@ -27,12 +31,12 @@ services:
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=computacao
       - MYSQL_DATABASE=slice2
-    security_opt:
-      - seccomp:unconfined
+#    security_opt:
+#      - seccomp:unconfined
 #    volumes:
 #      - ./docker/mysql_volume:/var/lib/mysql
     healthcheck:
       test: "/usr/bin/mysql --user=root --password=computacao --execute \"SHOW DATABASES;\""
       interval: 2s
-      timeout: 30s
-      retries: 15
+      timeout: 60s
+      retries: 30

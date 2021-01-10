@@ -1,0 +1,1 @@
+kompose convert -f docker-compose.yml -o slice1.yml

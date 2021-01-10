@@ -80,9 +80,9 @@ items:
                 exec:
                   command:
                     - /usr/bin/mysql --user=root --password=computacao --execute "SHOW DATABASES;"
-                failureThreshold: 15
+                failureThreshold: 30
                 periodSeconds: 2
-                timeoutSeconds: 30
+                timeoutSeconds: 60
               name: db
               ports:
                 - containerPort: 3306
@@ -126,7 +126,7 @@ items:
                   value: src/App.py
                 - name: FLASK_RUN_HOST
                   value: 0.0.0.0
-              image: jesimielefraimdias/ubuntu-slice2
+              image: jesimielefraimdias/ubuntu-slice2:1.0.3
               name: ubuntu
               ports:
                 - containerPort: 5000

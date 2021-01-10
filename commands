@@ -1,5 +1,0 @@
-docker ps #Lista todos os dockers instalados
-docker exec ID + comandos ssh # comandos serão executados dentro do container
-docker exec -it ID /bin/bash # combinação de comandos que fazem entrar no bash
-docker stop ID #Para um container pelo ID
-docker kill
