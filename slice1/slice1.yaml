@@ -8,15 +8,15 @@ items:
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
-        io.kompose.service: ubuntu
-      name: ubuntu
+        io.kompose.service: ubuntu-slice1
+      name: ubuntu-slice1
     spec:
       ports:
         - name: "5001"
           port: 5001
           targetPort: 5000
       selector:
-        io.kompose.service: ubuntu
+        io.kompose.service: ubuntu-slice1
     status:
       loadBalancer: {}
   - apiVersion: apps/v1
@@ -27,13 +27,13 @@ items:
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
-        io.kompose.service: ubuntu
-      name: ubuntu
+        io.kompose.service: ubuntu-slice1
+      name: ubuntu-slice1
     spec:
       replicas: 1
       selector:
         matchLabels:
-          io.kompose.service: ubuntu
+          io.kompose.service: ubuntu-slice1
       strategy: {}
       template:
         metadata:
@@ -42,11 +42,11 @@ items:
             kompose.version: 1.22.0 (955b78124)
           creationTimestamp: null
           labels:
-            io.kompose.service: ubuntu
+            io.kompose.service: ubuntu-slice1
         spec:
           containers:
             - image: jesimielefraimdias/ubuntu-slice1:1.0.0
-              name: ubuntu
+              name: ubuntu-slice1
               ports:
                 - containerPort: 5000
               resources: {}

@@ -1,6 +1,6 @@
 version: "3"
 services:
-  ubuntu:
+  ubuntu-slice2:
 #    build: 
 #      context: ./docker
 #      dockerfile: Dockerfile
