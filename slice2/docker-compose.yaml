@@ -16,7 +16,7 @@ services:
 #    volumes:
 #      - ./docker/mysql_volume:/var/lib/mysql
     healthcheck:
-      test: "/usr/bin/mysql --user=root --password=computacao --execute \"use slice2;show databases;\""
+      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show databases;\""
 #      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show database;\""
       interval: 2s
       timeout: 30s
