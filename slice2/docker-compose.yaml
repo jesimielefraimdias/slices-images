@@ -37,9 +37,7 @@ services:
     command: >
       bash -c "source bin/activate &&
       pip3 install wheel &&
-      pip3 install -r requirements.txt && 
-      python3 src/db.py && 
-      flask run"
+      pip3 install -r requirements.txt"
     restart: on-failure
     depends_on:
       - db
