@@ -1,0 +1,124 @@
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml -o slice2_.yaml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: db
+      name: db
+    spec:
+      ports:
+        - name: "3306"
+          port: 3306
+          targetPort: 3306
+      selector:
+        io.kompose.service: db
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml -o slice2_.yaml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ubuntu-slice2
+      name: ubuntu-slice2
+    spec:
+      ports:
+        - name: "5000"
+          port: 5000
+          targetPort: 5000
+      selector:
+        io.kompose.service: ubuntu-slice2
+    status:
+      loadBalancer: {}
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml -o slice2_.yaml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: db
+      name: db
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          io.kompose.service: db
+      strategy: {}
+      template:
+        metadata:
+          annotations:
+            kompose.cmd: kompose convert -f docker-compose.yaml -o slice2_.yaml
+            kompose.version: 1.22.0 (955b78124)
+          creationTimestamp: null
+          labels:
+            io.kompose.service: db
+        spec:
+          containers:
+            - args:
+                - --default-authentication-plugin=mysql_native_password
+              env:
+                - name: MYSQL_DATABASE
+                  value: slice2
+                - name: MYSQL_ROOT_HOST
+                  value: '%'
+                - name: MYSQL_ROOT_PASSWORD
+                  value: computacao
+                - name: MYSQL_USER
+                  value: root
+              image: mysql:latest
+              livenessProbe:
+                exec:
+                  command:
+                    - /usr/bin/mysql --user=root --password=computacao --execute "show database;"
+                failureThreshold: 15
+                periodSeconds: 2
+                timeoutSeconds: 30
+              name: db
+              ports:
+                - containerPort: 3306
+              resources: {}
+          restartPolicy: Always
+    status: {}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml -o slice2_.yaml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ubuntu-slice2
+      name: ubuntu-slice2
+    spec:
+      containers:
+        - args:
+            - bash
+            - -c
+            - source bin/activate && pip3 install wheel && pip3 install -r requirements.txt &&  python3 src/db.py &&  flask run
+          env:
+            - name: DEBIAN_FRONTEND
+              value: noninteractive
+            - name: FLASK_APP
+              value: src/App.py
+            - name: FLASK_RUN_HOST
+              value: 0.0.0.0
+          image: jesimielefraimdias/ubuntu-slice2:1.0.4
+          name: ubuntu-slice2
+          ports:
+            - containerPort: 5000
+          resources: {}
+      restartPolicy: OnFailure
+    status: {}
+kind: List
+metadata: {}
+

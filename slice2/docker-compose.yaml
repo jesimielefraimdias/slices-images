@@ -11,12 +11,12 @@ services:
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=computacao
       - MYSQL_DATABASE=slice2
-#    healthcheck:
-#      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show databases;\""
-#      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show database;\""
-#      interval: 2s
-#      timeout: 30s
-#      retries: 15
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show databases;\""
+      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show database;\""
+      interval: 2s
+      timeout: 30s
+      retries: 15
 
   ubuntu-slice2:
     image: jesimielefraimdias/ubuntu-slice2:1.0.4
@@ -30,6 +30,7 @@ services:
       bash -c "source bin/activate &&
       pip3 install wheel &&
       pip3 install -r requirements.txt && 
+      python3 src/db.py && 
       flask run"
     restart: on-failure
     depends_on:
