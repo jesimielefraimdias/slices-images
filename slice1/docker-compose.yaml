@@ -1,9 +1,8 @@
 version: "3"
 services:
+  #Crio um service chamado ubuntu-slice1 e importo a imagem do meu docker hub
   ubuntu-slice1:
-#    build: 
-#      context: ./docker
-#      dockerfile: Dockerfile
     image: jesimielefraimdias/ubuntu-slice1:1.0.0
+    #Mapeio para o usuário ter acesso pela porta 5001
     ports:
       - "5001:5000"
