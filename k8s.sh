@@ -1,20 +1,23 @@
-# Definindo meu projeto
-gcloud config set project "ID"
+#Entrando no projeto
+gcloud config set project seminario-selice
 
-# Definindo a variável para a zona do GCP, no meu caso: us-central1-a
-export MY_ZONE=us-central1-a
+#Setando  a minha zona
+export MY_ZONE=southamerica-east1-a
 
 # Criando um CLUSTER chamado "seminario" com 4 nós
 gcloud container clusters create seminario --zone $MY_ZONE --num-nodes 4
 
 #Recebendo meu projeto
 git clone https://github.com/jesimielefraimdias/slices-images.git
-#Entrando no projeto
-gcloud config set project seminario-selice
-#Cria o pod e o service
+
+#Na pasta /slices-images/slice1 executar o comando que criará o pod e o service
 kubectl create -f slice1.yaml
+#Na pasta /slices-images/slice2 executar o comando que criará o pod e o service
+kubectl create -f slice2.yaml
+
 #Verifica os pods
 kubectl get pods
+
 #Verifica os services
 kubectl get services
 #Crio um service a partir de outro service, porém passando o parâmetro LoadBalancer para 
@@ -26,5 +29,3 @@ kubectl delete service/ubuntu-slice1
 kubectl delete service/ubuntu-slice2
 #Aplica o autoscale na slice 1
 kubectl autoscale deployment ubuntu-slice1 --cpu-percent=50 --min=1 --max=10
-
-

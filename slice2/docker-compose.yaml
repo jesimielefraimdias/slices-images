@@ -1,37 +1,48 @@
 version: "3"
 services:
+  #Serviço de bd separado da nossa aplicação web
   db:
     image: "mysql:latest"
     ports: 
       - "3306:3306"
+    #Padrões da documentação do container
     command: --default-authentication-plugin=mysql_native_password
     restart: always
+    #Variáveis de ambiente
     environment:
       - MYSQL_ROOT_HOST=%
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=computacao
       - MYSQL_DATABASE=slice2
+    #Para garantir que o BD esteja ativo antes da aplicação web
+    #Executa show databases 15 vezes em um intervalo de 2s durante 30s
     healthcheck:
       test: "/usr/bin/mysql --user=root --password=computacao --execute \"show databases;\""
-      test: "/usr/bin/mysql --user=root --password=computacao --execute \"show database;\""
       interval: 2s
       timeout: 30s
       retries: 15
-
+  #A aplicação web está rodando no ubuntu
   ubuntu-slice2:
+    #Imagem efita a partir do dockerfile
     image: jesimielefraimdias/ubuntu-slice2:1.0.4
+    #Mapeio a porta para o usuário
     ports:
       - "5000:5000"
+    #Variáveis de ambiente
     environment:
       - FLASK_APP=src/App.py
       - FLASK_RUN_HOST=0.0.0.0
       - DEBIAN_FRONTEND=noninteractive
+    #Esses são os comandos que irão ser rodados apenas após o healthcheck
     command: >
       bash -c "source bin/activate &&
       pip3 install wheel &&
       pip3 install -r requirements.txt && 
       python3 src/db.py && 
       flask run"
+    #Forço o container ao restart a partir de um erro, pois mesmo com o healthcheck ainda
+    #estava apresentando problemas.
     restart: on-failure
+    #Dependência do service db
     depends_on:
       - db
