@@ -39,7 +39,7 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /usr/bin/mysql --user=root --password=computacao --execute "use slice2;show databases;"
+                - /usr/bin/mysql --user=root --password=computacao --execute "show databases;"
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 30
