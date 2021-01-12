@@ -76,13 +76,6 @@ items:
                 - name: MYSQL_USER
                   value: root
               image: mysql:latest
-              livenessProbe:
-                exec:
-                  command:
-                    - /usr/bin/mysql --user=root --password=computacao --execute "show database;"
-                failureThreshold: 15
-                periodSeconds: 2
-                timeoutSeconds: 30
               name: db
               ports:
                 - containerPort: 3306
@@ -104,7 +97,7 @@ items:
         - args:
             - bash
             - -c
-            - source bin/activate && pip3 install wheel && pip3 install -r requirements.txt &&  python3 src/db.py &&  flask run
+            - source bin/activate && pip3 install wheel && pip3 install -r requirements.txt &&  flask run
           env:
             - name: DEBIAN_FRONTEND
               value: noninteractive
